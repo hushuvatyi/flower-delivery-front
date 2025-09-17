@@ -98,11 +98,11 @@ export default function OrderDetailsPage() {
               <span>
                 {item.name} × {item.quantity}
               </span>
-              <span>{item.price * item.quantity} грн</span>
+              <span>{item.price * item.quantity} ₴ </span>
             </li>
           ))}
         </ul>
-        <p className="text-right font-bold text-lg">Total: {order.total} ₴ </p>
+        <p className="text-right font-bold text-lg">Total: {order.total} ₴</p>
       </section>
     </div>
   );

@@ -41,12 +41,12 @@ export default function CartItem({
             onClick={() => dispatch(removeItem(id))}
             className="text-red-500 hover:underline text-sm"
           >
-            Видалити
+            Delete
           </button>
         </div>
       </div>
 
-      <p className="font-bold">{price * quantity} грн</p>
+      <p className="font-bold">{price * quantity} ₴</p>
     </li>
   );
 }
