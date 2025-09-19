@@ -1,14 +1,27 @@
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  Popup,
+} from "react-leaflet";
 import { useState } from "react";
 import L from "leaflet";
 import { useFormikContext } from "formik";
 import type { OrderFormValues } from "../types/interfaces";
 import { getAddress } from "../api/getAddress";
+import { useAppSelector } from "../app/hooks";
 
 const markerIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
+});
+
+const shopIcon = new L.Icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/128/5695/5695239.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
 });
 
 function LocationMarker() {
@@ -31,8 +44,8 @@ function LocationMarker() {
 }
 
 export default function DeliveryMap() {
-  const { values } = useFormikContext<OrderFormValues>();
-
+  const shopsList = useAppSelector((state) => state.shops).shops;
+  console.log("shops in DeliveryMap: ", shopsList);
   return (
     <div className="w-full h-2/3 rounded-lg overflow-hidden shadow">
       <MapContainer
@@ -44,17 +57,17 @@ export default function DeliveryMap() {
           attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <LocationMarker
-        // onSelect={(lat, lng) => {
-        //   console.log(`Selected coordinates: ${lat}, ${lng}`);
-        // }}
-        />
+        <LocationMarker />
+
+        {shopsList.map((shop) => (
+          <Marker key={shop.id} position={[shop.lat, shop.lng]} icon={shopIcon}>
+            <Popup>
+              <strong>{shop.name}</strong>
+              <br />
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
-      {values.deliveryAddress && (
-        <div className="p-2 bg-white text-sm h-1/4">
-          Selected Address: {values.deliveryAddress}
-        </div>
-      )}
     </div>
   );
 }

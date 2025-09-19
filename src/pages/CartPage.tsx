@@ -23,7 +23,6 @@ const CartFormSchema = Yup.object().shape({
     is: true,
     then: (schema) => schema.required("Enter recipient's phone number"),
   }),
-  // deliveryDate: Yup.string(),
 });
 
 export default function CartPage() {
@@ -32,9 +31,9 @@ export default function CartPage() {
   const navigate = useNavigate();
 
   const initialValues: OrderFormValues = {
-    customerName: "Vin",
-    customerPhone: "0507896542",
-    customerEmail: "vin@mail.com",
+    customerName: "",
+    customerPhone: "",
+    customerEmail: "",
     deliveryAddress: "",
     otherRecipient: false,
     deliveryName: "",
