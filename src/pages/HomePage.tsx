@@ -10,6 +10,8 @@ export default function HomePage() {
 
   const cartItemsCount = useAppSelector((state) => state.cart.items.length);
   const selectedShop = useAppSelector((state) => state.cart.shopId);
+  const loading = useAppSelector((state) => state.shops.loading);
+  const error = useAppSelector((state) => state.shops.error);
 
   useEffect(() => {
     dispatch(fetchShops());
@@ -20,6 +22,19 @@ export default function HomePage() {
       dispatch(fetchShopProducts(selectedShop));
     }
   }, [selectedShop, products, dispatch]);
+
+  if (loading) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 text-red-600">
+        <h1 className="text-xl font-bold mb-2">Error</h1>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex">

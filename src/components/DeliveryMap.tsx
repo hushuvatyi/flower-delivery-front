@@ -45,7 +45,7 @@ function LocationMarker() {
 
 export default function DeliveryMap() {
   const shopsList = useAppSelector((state) => state.shops).shops;
-  console.log("shops in DeliveryMap: ", shopsList);
+
   return (
     <div className="w-full h-2/3 rounded-lg overflow-hidden shadow">
       <MapContainer
