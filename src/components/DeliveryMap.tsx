@@ -1,6 +1,9 @@
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { useState } from "react";
 import L from "leaflet";
+import { useFormikContext } from "formik";
+import type { OrderFormValues } from "../types/interfaces";
+import { getAddress } from "../api/getAddress";
 
 const markerIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -8,17 +11,17 @@ const markerIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-function LocationMarker({
-  onSelect,
-}: {
-  onSelect: (lat: number, lng: number) => void;
-}) {
+function LocationMarker() {
+  const { setFieldValue } = useFormikContext<OrderFormValues>();
   const [position, setPosition] = useState<L.LatLng | null>(null);
 
   useMapEvents({
-    click(e) {
+    async click(e) {
       setPosition(e.latlng);
-      onSelect(e.latlng.lat, e.latlng.lng);
+      setFieldValue(
+        "deliveryAddress",
+        await getAddress(e.latlng.lat, e.latlng.lng)
+      );
     },
   });
 
@@ -28,27 +31,29 @@ function LocationMarker({
 }
 
 export default function DeliveryMap() {
-  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
-    null
-  );
+  const { values } = useFormikContext<OrderFormValues>();
 
   return (
-    <div className="w-full h-[400px] rounded-lg overflow-hidden shadow">
+    <div className="w-full h-2/3 rounded-lg overflow-hidden shadow">
       <MapContainer
-        center={[50.4501, 30.5234]}
+        center={[48.9261, 24.7207]}
         zoom={12}
-        className="w-full h-full"
+        className="w-full h-full  "
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <LocationMarker onSelect={(lat, lng) => setCoords({ lat, lng })} />
+        <LocationMarker
+        // onSelect={(lat, lng) => {
+        //   console.log(`Selected coordinates: ${lat}, ${lng}`);
+        // }}
+        />
       </MapContainer>
-      {coords && (
-        <p className="text-sm mt-2 text-gray-600">
-          Selected address: {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)}
-        </p>
+      {values.deliveryAddress && (
+        <div className="p-2 bg-white text-sm h-1/4">
+          Selected Address: {values.deliveryAddress}
+        </div>
       )}
     </div>
   );

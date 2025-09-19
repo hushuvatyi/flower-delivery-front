@@ -1,12 +1,13 @@
 export interface OrderFormValues {
   customerName: string;
   customerPhone: string;
+  customerEmail: string;
   deliveryAddress: string;
   otherRecipient: boolean;
   deliveryName: string;
   deliveryPhone: string;
   message: string;
-  deliveryDate: string;
+  deliveryDate: string | Date | null;
 }
 
 export interface CreateOrderPayload extends OrderFormValues {

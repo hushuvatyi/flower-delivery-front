@@ -80,7 +80,8 @@ export default function OrderDetailsPage() {
           </p>
         )}
         <p>
-          <strong>Delivery date:</strong> {order.deliveryDate}
+          <strong>Delivery date:</strong>{" "}
+          {new Date(order.deliveryDate).toLocaleString()}
         </p>
         {order.createdAt && (
           <p>

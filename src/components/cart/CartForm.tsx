@@ -26,6 +26,14 @@ export default function CartForm() {
         </div>
 
         <div>
+          <label className="block mb-1">Email</label>
+          <Field name="customerEmail" className="w-full border rounded p-2" />
+          {errors.customerEmail && touched.customerEmail && (
+            <div className="text-red-500 text-sm">{errors.customerEmail}</div>
+          )}
+        </div>
+
+        <div>
           <label className="block mb-1">Delivery address</label>
           <Field name="deliveryAddress" className="w-full border rounded p-2" />
           {errors.deliveryAddress && touched.deliveryAddress && (

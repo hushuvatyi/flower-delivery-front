@@ -7,10 +7,12 @@ import CartSummary from "../components/cart/CartSummary";
 import type { OrderFormValues } from "../types/interfaces";
 import { createOrder } from "../api/orders";
 import { useNavigate } from "react-router-dom";
+import DeliveryMap from "../components/DeliveryMap";
 
 const CartFormSchema = Yup.object().shape({
   customerName: Yup.string().required("Enter your name"),
   customerPhone: Yup.string().required("Enter your phone number"),
+  customerEmail: Yup.string().email("Invalid email address"),
   deliveryAddress: Yup.string().required("Enter delivery address"),
   otherRecipient: Yup.boolean(),
   deliveryName: Yup.string().when("otherRecipient", {
@@ -21,7 +23,7 @@ const CartFormSchema = Yup.object().shape({
     is: true,
     then: (schema) => schema.required("Enter recipient's phone number"),
   }),
-  deliveryDate: Yup.string(),
+  // deliveryDate: Yup.string(),
 });
 
 export default function CartPage() {
@@ -30,8 +32,9 @@ export default function CartPage() {
   const navigate = useNavigate();
 
   const initialValues: OrderFormValues = {
-    customerName: "",
-    customerPhone: "",
+    customerName: "Vin",
+    customerPhone: "0507896542",
+    customerEmail: "vin@mail.com",
     deliveryAddress: "",
     otherRecipient: false,
     deliveryName: "",
@@ -64,7 +67,11 @@ export default function CartPage() {
             ),
           };
 
-          console.log("orderData: ", orderData);
+          if (!orderData.deliveryDate) {
+            orderData.deliveryDate = new Date(
+              Date.now() + 1000 * 60 * 60 * 24
+            ).toISOString();
+          }
 
           const createdOrder = await createOrder(orderData);
           createdOrder.otherRecipient = orderData.otherRecipient;
@@ -72,7 +79,7 @@ export default function CartPage() {
           navigate(`/orders/${createdOrder.id}`, { state: createdOrder });
         } catch (err) {
           console.error("Failed to create order:", err);
-          alert("Помилка при створенні замовлення");
+          alert("Failed to create order:");
         } finally {
           setSubmitting(false);
           dispatch({ type: "cart/clearCart" });
@@ -85,8 +92,9 @@ export default function CartPage() {
             <CartItemsList />
             <CartForm />
           </div>
-          <div>
+          <div className="space-y-6">
             <CartSummary />
+            <DeliveryMap />
           </div>
         </Form>
       )}

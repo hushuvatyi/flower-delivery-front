@@ -39,7 +39,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         className="w-full h-40 object-cover"
       />
       <h3 className="font-bold">{product.catalogProduct.name}</h3>
-      <p>{product.price} грн</p>
+      <p>{product.price} ₴</p>
       <button
         onClick={handleAdd}
         className="bg-green-500 text-white px-3 py-1 rounded mt-2"
