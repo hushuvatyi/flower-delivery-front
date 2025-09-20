@@ -71,6 +71,7 @@ const shopsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchShopProducts.fulfilled, (state, action) => {
+        state.loading = false;
         state.products[action.payload.shopId] = action.payload.products;
       })
       .addCase(fetchShopProducts.rejected, (state) => {
